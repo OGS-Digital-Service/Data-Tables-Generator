@@ -1,0 +1,23 @@
+{
+  "name": "data-tables-generator",
+  "version": "1.0.0",
+  "description": "For data tables, just like it says!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OGS-Digital-Service/Data-Tables-Generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OGS-Digital-Service/Data-Tables-Generator/issues"
+  },
+  "homepage": "https://github.com/OGS-Digital-Service/Data-Tables-Generator#readme",
+  "dependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}
