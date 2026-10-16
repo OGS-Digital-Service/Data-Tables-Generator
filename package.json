@@ -4,7 +4,9 @@
   "description": "For data tables, just like it says!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx @11ty/eleventy --serve & npx tailwindcss -i tailwind-setup.css -o css/tailwind.css --minify --watch",
+    "11ty": "npx @11ty/eleventy --serve",
+    "build": "npx @11ty/eleventy"
   },
   "repository": {
     "type": "git",
