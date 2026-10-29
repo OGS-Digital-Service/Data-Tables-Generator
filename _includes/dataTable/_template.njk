@@ -71,6 +71,22 @@
         {% endfor %}
     </tbody>
     {% else %}
+    <tbody>
+        {% for data in tableData %}
+            <tr>
+                <td> {{data.initiative}} </td>
+                <td> {{data.action_name}} </td>
+                <td> {{data.agency}} </td>
+                <td> {{data.description_of_action}} </td>
+                <td> {{data.type_of_action}} </td>
+                <td> {{data.change_type}} </td>
+                <td> {{data.category}} </td>
+                <td> {{data.goal}} </td>
+                <td> {{data.status}} </td>
+                
+            </tr>
+        {% endfor %}
+    </tbody>
     {% endif %}
 
 </table>

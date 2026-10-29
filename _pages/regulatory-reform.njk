@@ -1,0 +1,73 @@
+---
+layout: render.njk
+title: NYS Digital Service Data Table for Regulatory Reform Data
+permalink: "reg-reform-table/"
+data: _regReform
+---
+{% from '../_includes/_components.njk' import dataTable with context %}
+<style> {% include '../css/nys-design-system.css' %} </style>
+<style>{% include '../_includes/dataTable/_dataTable.css'  %}</style>
+<style>{% include '../_includes/dataTable/_datatables.css'  %}
+    .dt-hasChild.dtr-expanded {
+  background: var(--mid-gray);
+}
+
+    .dtr-control:hover {
+        outline: 3px solid var(--primary-core-blue);
+        text-decoration: underline;
+
+    }
+
+    .dtr-control:focus {
+        outline: 3px solid var(--primary-core-blue);
+        text-decoration: underline;
+
+    }
+</style>
+
+<style>{% include '../_includes/dataTable/_datatablesResponsive.css'  %}</style>
+<div class="nysds-responsive-wrapper">
+{{
+    dataTable({
+        dataSource: _regReform,
+        tableName:"regReform",
+        title:"Regulatory Reform Data",
+        caption:"Draft Regulatory reform table",
+        searchPlaceholder:"search by options",
+        disclaimer: "This table is for informational purposes only.",
+        tableHeaders: [
+            {
+              title: "Initiative"
+            },
+            {
+              title: "Action"
+            },
+            {
+              title: "Agency"
+            },
+            {
+              title: "Description"
+            },
+            {
+              title: "Type of Action"
+            },
+            {
+              title: "Change Type"
+            },
+            {
+              title: "Category"
+            },
+            {
+              title: "Goal"
+            },
+            {
+              title: "Status"
+            }  
+        ]
+    })
+}}
+</div>
+
+
+
+</script>
