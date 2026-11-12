@@ -5,7 +5,7 @@
         new DataTable('#{{params.tableName}}', {
             columnDefs: [{ 
                 orderable: true, 
-                targets: [0,1,2,3,4],  // Include the "Remote or In-Person" column here
+                targets: [0,1,2,3,4,5,6],  // Include the "number of columns" column here
                 render: function(data, type, row, meta) {
                     if (type != 'display') {
                         return data.replace( /<.*?>/g, '' );
@@ -28,14 +28,14 @@
             responsive: true,
             drawCallback: function() {
                 if (!dropdownsInitialized) {
-                    // Initialize the dropdown filter for the "Office" column
-                    initDropdown('office_filter', 2, this.api());
+                    // Initialize the dropdown filter for the "agency" column
+                    initDropdown('agency_filter', 2, this.api());
 
-                    // Initialize the dropdown filter for the "Age" column
-                    initDropdown('age_filter', 3, this.api());
+                    // Initialize the dropdown filter for the "type of action" column
+                    initDropdown('type_filter', 4, this.api());
 
-                    // Initialize the dropdown filter for the "Remote or In-Person" column
-                    initDropdown('remote_person_filter', 4, this.api());
+                    // Initialize the dropdown filter for the "cateogry" column
+                    initDropdown('category_filter', 6, this.api());
 
                     // Initialize the reset button
                     initResetButton(this.api());
@@ -77,9 +77,9 @@
                         $(api.table().node()).find('.dataTables_filter input').val('');
                         
                         // Clear dropdowns
-                        $('#office_filter').val('');
-                        $('#age_filter').val('');
-                        $('#remote_person_filter').val('');
+                        $('#agency_filter').val('');
+                        $('#type_filter').val('');
+                        $('#category_filter').val('');
                         
                         // Redraw the table
                         api.search('').columns().search('').draw();
