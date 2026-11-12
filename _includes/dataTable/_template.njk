@@ -3,14 +3,24 @@
 <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" ></script>
 <script src="https://cdn.datatables.net/responsive/3.0.8/js/dataTables.responsive.min.js" ></script>
 
-<script>
-    {% if params.tablename == "phonefree" %}
+ {% if params.tableName == "phonefree" %}
+    <script>
         {% include './_scrollTable.js' %}
-    {% else %}
+    </script>
+    
+    {% elseif params.tableName == "cart" %}
+    <script>
         {% include './_responsiveTable.js' %}
          {% include './_a11yControl.js' %}
+         </script>
+    {% else %}
+    <script>
+        
+        {% include './_customDropdown.js' %}
+         {% include './_a11yControl.js' %}
+        </script>
     {% endif %}
-</script>
+
 
 {%set tableData = params.dataSource %}
 
@@ -19,7 +29,7 @@
 </h2>
 
 
-
+<div class="filters"></div>
 <table id="{{params.tableName}}" class="display">
     <caption>
         {{params.caption}}
