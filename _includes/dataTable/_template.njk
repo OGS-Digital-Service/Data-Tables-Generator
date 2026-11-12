@@ -4,8 +4,13 @@
 <script src="https://cdn.datatables.net/responsive/3.0.8/js/dataTables.responsive.min.js" ></script>
 
 <script>
-    {% if params.tablename == "phonefree" %}
+    {% if params.tablename === "phonefree" %}
         {% include './_scrollTable.js' %}
+
+    {% elseif params.tablename === "cart" %}
+        {% include './_customDropdown.js' %}
+         {% include './_a11yControl.js' %}
+
     {% else %}
         {% include './_responsiveTable.js' %}
          {% include './_a11yControl.js' %}
@@ -19,7 +24,7 @@
 </h2>
 
 
-
+<div class="filters"></div>
 <table id="{{params.tableName}}" class="display">
     <caption>
         {{params.caption}}
