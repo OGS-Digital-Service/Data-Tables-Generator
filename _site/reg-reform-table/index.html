@@ -1290,6 +1290,14 @@ html.dark .dt-container .dt-paging .dt-paging-button:active {
         text-decoration: underline;
 
     }
+    .custom-filters {
+      display: flex;
+      justify-content: space-between
+      
+    }
+    .custom-select {
+      max-width: 200px;
+    }
 </style>
 
 <style>table.dataTable.dtr-inline.collapsed > tbody > tr > td.child,
@@ -1494,17 +1502,17 @@ html[data-bs-theme="dark"] div.dtr-modal div.dtr-modal-display {
  
     <script>
         
-        (function($) {
-    $(document).ready(function() {
+        (function ($) {
+    $(document).ready(function () {
         let dropdownsInitialized = false;
 
         new DataTable('#regReform', {
-            columnDefs: [{ 
-                orderable: true, 
-                targets: [0,1,2,3,4,5,6],  // Include the "number of columns" column here
-                render: function(data, type, row, meta) {
-                    if (type != 'display') {
-                        return data.replace( /<.*?>/g, '' );
+            columnDefs: [{
+                orderable: true,
+                targets: [0, 1, 2, 3, 4, 5, 6],
+                render: function (data, type) {
+                    if (type !== 'display' && typeof data === 'string') {
+                        return data.replace(/<.*?>/g, '');
                     }
                     return data;
                 }
@@ -1522,67 +1530,72 @@ html[data-bs-theme="dark"] div.dtr-modal div.dtr-modal-display {
             },
             order: [[0, 'asc']],
             responsive: true,
-            drawCallback: function() {
-                if (!dropdownsInitialized) {
-                    // Initialize the dropdown filter for the "agency" column
-                    initDropdown('agency_filter', 2, this.api());
 
-                    // Initialize the dropdown filter for the "type of action" column
-                    initDropdown('type_filter', 4, this.api());
+            drawCallback: function () {
+                if (dropdownsInitialized) return;
 
-                    // Initialize the dropdown filter for the "cateogry" column
-                    initDropdown('category_filter', 6, this.api());
+                const api = this.api();
+                const layoutRow = $(api.table().container())
+                    .find('.dt-layout-row')
+                    .first();
 
-                    // Initialize the reset button
-                    initResetButton(this.api());
+                if (!layoutRow.length) return;
 
-                    // Set the flag to true
-                    dropdownsInitialized = true;
-                }
+                const customFilters = $('<div class="custom-filters"></div>');
+
+                initDropdown('agency_filter', 2, api, 'Agency', customFilters);
+                initDropdown('type_filter', 4, api, 'Type of Action', customFilters);
+                initDropdown('category_filter', 6, api, 'Category', customFilters);
+
+                $('<button type="button" class="nysds-reset-button">Reset</button>')
+                    .appendTo(customFilters)
+                    .on('click', function () {
+                        customFilters.find('select').val('');
+
+                        api.search('');
+                        [2, 4, 6].forEach(function (columnIndex) {
+                            api.column(columnIndex).search('');
+                        });
+
+                        api.draw();
+                    });
+
+                // Add the wrapper to the row; don't move or empty the row.
+                layoutRow.after(customFilters);
+                dropdownsInitialized = true;
             }
         });
 
-        // Initialize the dropdown filter function
-        function initDropdown(id, columnIndex, api) {
-            var select = $('<select class="clearthis width_modifier border border-solid border-black p-2.5 mt-2 md:mt-0" id="' + id + '"><option value=""></option></select>')
-                .appendTo( $(".filters") )
+        function initDropdown(id, columnIndex, api, labelText, parent) {
+            const container = $('<div></div>').appendTo(parent);
+
+            $('<label></label>')
+                .attr('for', id)
+                .text(labelText + ':')
+                .appendTo(container);
+
+            const select = $('<select class="custom-select"></select>')
+                .attr('id', id)
+                .append('<option value=""></option>')
+                .appendTo(container)
                 .on('change', function () {
-                    var val = $.fn.dataTable.util.escapeRegex(
-                        $(this).val()
-                    );
+                    const value = $.fn.dataTable.util.escapeRegex($(this).val());
+
                     api.column(columnIndex)
-                        .search( val ? '^'+val+'$' : '', true, false )
+                        .search(value ? '^' + value + '$' : '', true, false)
                         .draw();
                 });
 
-            // Populate the dropdown with unique values from the specified column
-            api.column(columnIndex).data().unique().sort().each(function ( d, j ) {
-                select.append('<option value="' + d + '">' + d + '</option>');
-            });
+            api.column(columnIndex)
+                .data()
+                .unique()
+                .sort()
+                .each(function (value) {
+                    select.append(
+                        $('<option></option>').val(value).text(value)
+                    );
+                });
         }
-
-        // Initialize the reset button function
-        function initResetButton(api) {
-            var clearFilter = $(".filters .nysds-reset-button");
-            
-            if (clearFilter.length == 0) {
-                var clearButton = $('<button class="nysds-reset-button" id="clear"> Reset </button>')
-                    .appendTo( $(".filters") )
-                    .on('click', () => {
-                        // Clear search input
-                        $(api.table().node()).find('.dataTables_filter input').val('');
-                        
-                        // Clear dropdowns
-                        $('#agency_filter').val('');
-                        $('#type_filter').val('');
-                        $('#category_filter').val('');
-                        
-                        // Redraw the table
-                        api.search('').columns().search('').draw();
-                    });
-            }
-        }
-
     });
 })(jQuery);
 
