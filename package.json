@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/OGS-Digital-Service/Data-Tables-Generator#readme",
   "dependencies": {
-    "@11ty/eleventy": "^3.0.0"
+    "@11ty/eleventy": "^3.0.0",
+    "@nysds/styles": "^1.23.2"
   }
 }
