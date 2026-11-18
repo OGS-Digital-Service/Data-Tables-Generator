@@ -81,6 +81,20 @@
         {% endfor %}
     </tbody>
     {% else %}
+    <tbody>
+        {% for data in tableData %}
+            <tr>
+                
+                <td> {{data.language}} </td>
+                <td> {{data.service}} </td>
+                <td> {{data.availability}} </td>
+                <td> {{data.contractor}} </td>
+                <td> {{data.point_of_contact}} </td>
+                <td> {{data.email}} </td>
+                <td> {{data.phone}} </td>                
+            </tr>
+        {% endfor %}
+    </tbody>
     {% endif %}
 
 </table>
