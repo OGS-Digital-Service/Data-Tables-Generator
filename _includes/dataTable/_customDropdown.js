@@ -62,6 +62,13 @@
             }
         });
 
+        // Decode values that arrived as HTML entities (for example, "&amp;").
+        function decodeEntities(value) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = String(value ?? '');
+            return textarea.value;
+        }
+
         function initDropdown(id, columnIndex, api, labelText, parent) {
             const container = $('<div></div>').appendTo(parent);
 
@@ -72,23 +79,40 @@
 
             const select = $('<select class="custom-select"></select>')
                 .attr('id', id)
-                .append('<option value=""></option>')
+                .append(
+                    $('<option></option>')
+                        .val('')
+                        .text('')
+                        .prop('hidden', true)
+                )
                 .appendTo(container)
                 .on('change', function () {
-                    const value = $.fn.dataTable.util.escapeRegex($(this).val());
+                    const value = $.fn.dataTable.util.escapeRegex(
+                        $(this).val() || ''
+                    );
 
                     api.column(columnIndex)
                         .search(value ? '^' + value + '$' : '', true, false)
                         .draw();
                 });
 
+            const addedValues = new Set();
+
             api.column(columnIndex)
                 .data()
                 .unique()
                 .sort()
                 .each(function (value) {
+                    const text = decodeEntities(value);
+
+                    // Skip empty or whitespace-only values and prevent
+                    // duplicates that may result from entity decoding.
+                    if (!text.trim() || addedValues.has(text)) return;
+
+                    addedValues.add(text);
+
                     select.append(
-                        $('<option></option>').val(value).text(value)
+                        $('<option></option>').val(text).text(text)
                     );
                 });
         }
